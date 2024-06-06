@@ -24,3 +24,12 @@ interface Todo {
 type TodoKeys = keyof Todo; // 'title' | 'description' | 'completed'
 ```
 
+## `in`
+取联合类型的值，主要用于数组和对象的构建，不可直接用于 "对象类型"
+```ts
+type name = 'firstname' | 'lastname'
+type TName = {
+  [key in name]: string
+}
+// TName = { firstname: string, lastname: string }
+```
