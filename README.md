@@ -33,3 +33,27 @@ type TName = {
 }
 // TName = { firstname: string, lastname: string }
 ```
+
+## `Generics` 泛型
+注意点：
+- 变量需要定义在`<>`内部，参考[00007-easy-readonly](./src/00007-easy-readonly.ts)
+```ts
+/** 这里定义了K变量，并且给了默认值，使用时不需要传 */
+type MyReadonly<T, K = keyof T> = {
+  readonly [K in keyof T]: T[K]
+}
+```
+
+## Tuple
+
+### 使用`in`遍历Tuple的值，作为object的key，参考[00011-easy-tuple-to-object.ts](./src/00011-easy-tuple-to-object.ts)
+```ts
+type TupleToObject<T extends readonly any[]> = {
+  [K in T[number]]: K
+}
+```
+
+### 获取Tuple的长度, [00018-easy-tuple-length.ts](./src/00018-easy-tuple-length.ts)
+```ts
+type Length<T extends readonly any[]> = T['length']
+```
