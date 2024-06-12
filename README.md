@@ -57,3 +57,7 @@ type TupleToObject<T extends readonly any[]> = {
 ```ts
 type Length<T extends readonly any[]> = T['length']
 ```
+
+## `extends` 
+<!-- TODO -->
+[distributive](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html#distributive-conditional-types)
