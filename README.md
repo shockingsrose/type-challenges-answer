@@ -45,19 +45,39 @@ type MyReadonly<T, K = keyof T> = {
 ```
 
 ## Tuple
+TypeScript没有内置`Tuple`类型，但是可以自定义为`type Tuple = readonly unknown[]`
 
-### 使用`in`遍历Tuple的值，作为object的key，参考[00011-easy-tuple-to-object.ts](./src/00011-easy-tuple-to-object.ts)
+### 使用`in`遍历`Tuple`的值，作为object的key，参考[00011-easy-tuple-to-object.ts](./src/00011-easy-tuple-to-object.ts)
 ```ts
 type TupleToObject<T extends readonly any[]> = {
   [K in T[number]]: K
 }
 ```
 
-### 获取Tuple的长度, [00018-easy-tuple-length.ts](./src/00018-easy-tuple-length.ts)
+### 获取`Tuple`的长度, [00018-easy-tuple-length.ts](./src/00018-easy-tuple-length.ts)
 ```ts
 type Length<T extends readonly any[]> = T['length']
+```
+
+### 合并两个`Tuple`类型
+```ts
+type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 ```
 
 ## `extends` 
 <!-- TODO -->
 [distributive](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html#distributive-conditional-types)
+
+## `infer`
+<!-- TODO -->
+
+## 递归类型推断
+参考[00189-easy-awaited](./src/00189-easy-awaited.ts)
+```ts
+type MyAwaited<T extends PromiseLike<any>> = T extends PromiseLike<infer R>
+  ? R extends PromiseLike<any>
+    ? MyAwaited<R>
+    : R
+  : T;
+```
+
