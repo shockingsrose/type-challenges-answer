@@ -70,6 +70,7 @@ type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 
 ## `infer`
 <!-- TODO -->
+- 需跟在`extends`关键字后面
 
 ## 递归类型推断
 参考[00189-easy-awaited](./src/00189-easy-awaited.ts)
