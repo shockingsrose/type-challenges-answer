@@ -69,7 +69,6 @@ type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 [distributive](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html#distributive-conditional-types)
 
 ## `infer`
-<!-- TODO -->
 需跟在`extends`关键字后面
 
 用于函数参数的例子
