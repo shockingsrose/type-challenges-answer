@@ -70,7 +70,17 @@ type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 
 ## `infer`
 <!-- TODO -->
-- 需跟在`extends`关键字后面
+需跟在`extends`关键字后面
+
+用于函数参数的例子
+```ts
+type MyParameters<T extends (...args: any[]) => any> = T extends (...args: infer R) => any ? R : []
+```
+
+用于数组的例子
+```ts
+type Push<T extends any[], U> = [...T, U]
+```
 
 ## 递归类型推断
 参考[00189-easy-awaited](./src/00189-easy-awaited.ts)
