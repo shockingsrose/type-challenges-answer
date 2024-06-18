@@ -91,3 +91,10 @@ type MyAwaited<T extends PromiseLike<any>> = T extends PromiseLike<infer R>
   : T;
 ```
 
+## Function Type
+函数类型也属于对象类型
+```ts
+type Add = (a: number, b: number) => number;
+type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2;
+// type IsFunctionEqualObject = 1
+```
