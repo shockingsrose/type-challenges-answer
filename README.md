@@ -44,6 +44,9 @@ type MyReadonly<T, K = keyof T> = {
 }
 ```
 
+- 可作为变量，通过递归实现
+参考[00012-medium-chainable-options.ts](./src/00012-medium-chainable-options.ts)
+
 ## Tuple
 TypeScript没有内置`Tuple`类型，但是可以自定义为`type Tuple = readonly unknown[]`
 
@@ -90,6 +93,9 @@ type MyAwaited<T extends PromiseLike<any>> = T extends PromiseLike<infer R>
     : R
   : T;
 ```
+
+通过递归把泛型作为变量，参考[00012-medium-chainable-options.ts](./src/00012-medium-chainable-options.ts)
+
 
 ## Function Type
 函数类型也属于对象类型
