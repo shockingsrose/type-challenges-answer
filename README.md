@@ -24,6 +24,29 @@ type AppendToObject<T extends Record<string, unknown>, KEY extends string, VALUE
 }
 ```
 
+- `&`合并的两个对象，和原始包含了这两个对象所有属性的对象是不一样的
+
+```ts
+type A = {
+    key: 'cat';
+    value: 'green';
+} & {
+    home: boolean;
+}
+
+type B = {
+    key: 'cat';
+    value: 'green';
+    home: boolean;
+}
+
+type Res1 = Equal<A, B>;
+// type Res = false
+
+type Res2 = A extends B ? 1 : 2;
+// type Res2 = 1
+```
+
 ### `Generics` 泛型
 
 注意点：

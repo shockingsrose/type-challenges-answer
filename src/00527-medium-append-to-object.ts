@@ -50,3 +50,16 @@ type AppendToObject<T extends Record<string, unknown>, U extends string, V> = {
   [K in keyof T | U]: K extends keyof T ? T[K] : V;
 }
 
+
+// ============= Test Another Resolution ==============
+type AppendToObject1<T, U extends string | number | symbol, V> = {
+  [P in keyof T]: T[P]
+} & {
+  [K in U]: V
+}
+
+type A = AppendToObject1<test1, 'home', boolean>
+
+type Res1 = Equal<A, testExpect1>
+// type Res1 = false
+
