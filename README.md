@@ -87,6 +87,9 @@ type Length<T extends readonly any[]> = T['length']
 type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 ```
 
+### 用`keyof`遍历数组, 参考[00020-medium-promise-all](./src/00020-medium-promise-all.ts)
+
+
 ## 关键字
 
 ### `keyof`
