@@ -18,34 +18,34 @@ type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2;
 
 - `Generics` can't be the object key! but you can take the generics variable after the keyof.
 
-```ts
-type AppendToObject<T extends Record<string, unknown>, KEY extends string, VALUE> = {
-  [K in keyof T | KEY]: K extends keyof T ? T[K] : VALUE;
-}
-```
+  ```ts
+  type AppendToObject<T extends Record<string, unknown>, KEY extends string, VALUE> = {
+    [K in keyof T | KEY]: K extends keyof T ? T[K] : VALUE;
+  }
+  ```
 
 - `&`合并的两个对象，和原始包含了这两个对象所有属性的对象是不一样的
 
-```ts
-type A = {
-    key: 'cat';
-    value: 'green';
-} & {
-    home: boolean;
-}
+  ```ts
+  type A = {
+      key: 'cat';
+      value: 'green';
+  } & {
+      home: boolean;
+  }
 
-type B = {
-    key: 'cat';
-    value: 'green';
-    home: boolean;
-}
+  type B = {
+      key: 'cat';
+      value: 'green';
+      home: boolean;
+  }
 
-type Res1 = Equal<A, B>;
-// type Res = false
+  type Res1 = Equal<A, B>;
+  // type Res = false
 
-type Res2 = A extends B ? 1 : 2;
-// type Res2 = 1
-```
+  type Res2 = A extends B ? 1 : 2;
+  // type Res2 = 1
+  ```
 
 ### `Generics` 泛型
 
@@ -53,15 +53,26 @@ type Res2 = A extends B ? 1 : 2;
 
 - 变量需要定义在`<>`内部，参考[00007-easy-readonly](./src/00007-easy-readonly.ts)
 
-```ts
-/** 这里定义了K变量，并且给了默认值，使用时不需要传 */
-type MyReadonly<T, K = keyof T> = {
-  readonly [K in keyof T]: T[K]
-}
-```
+  ```ts
+  /** 这里定义了K变量，并且给了默认值，使用时不需要传 */
+  type MyReadonly<T, K = keyof T> = {
+    readonly [K in keyof T]: T[K]
+  }
+  ```
 
 - 可作为变量，通过递归实现
 参考[00012-medium-chainable-options.ts](./src/00012-medium-chainable-options.ts)
+
+#### Distributive Conditional Types 分布式条件
+
+When conditional types act on a generic type, they become distributive when given a union type. 
+
+```ts
+type ToArray<Type> = Type extends any ? Type[] : never;
+ 
+type StrArrOrNumArr = ToArray<string | number>;
+// Output: type StrArrOrNumArr = string[] | number[]
+```
 
 ### `Tuple` 元组/数组
 
