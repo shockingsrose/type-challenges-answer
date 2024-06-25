@@ -65,7 +65,7 @@ type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2;
 
 #### Distributive Conditional Types 分布式条件
 
-When conditional types act on a generic type, they become distributive when given a union type. 
+When conditional types act on a generic type, they become distributive when given a union type(the union type should be on the left of extends key)
 
 ```ts
 type ToArray<Type> = Type extends any ? Type[] : never;
