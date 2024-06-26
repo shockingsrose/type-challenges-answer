@@ -78,7 +78,7 @@ type StrArrOrNumArr = ToArray<string | number>;
 
 TypeScript没有内置`Tuple`类型，但是可以自定义为`type Tuple = readonly unknown[]`
 
-### 使用`in`遍历`Tuple`的值，作为object的key，参考[00011-easy-tuple-to-object.ts](./src/00011-easy-tuple-to-object.ts)
+#### 使用`in`遍历`Tuple`的值，作为object的key，参考[00011-easy-tuple-to-object.ts](./src/00011-easy-tuple-to-object.ts)
 
 ```ts
 type TupleToObject<T extends readonly any[]> = {
@@ -86,20 +86,32 @@ type TupleToObject<T extends readonly any[]> = {
 }
 ```
 
-### 获取`Tuple`的长度, [00018-easy-tuple-length.ts](./src/00018-easy-tuple-length.ts)
+#### 获取`Tuple`的长度, [00018-easy-tuple-length.ts](./src/00018-easy-tuple-length.ts)
 
 ```ts
 type Length<T extends readonly any[]> = T['length']
 ```
 
-### 合并两个`Tuple`类型
+#### 合并两个`Tuple`类型
 
 ```ts
 type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 ```
 
-### 用`keyof`遍历数组, 参考[00020-medium-promise-all](./src/00020-medium-promise-all.ts)
+#### 用`keyof`遍历数组, 参考[00020-medium-promise-all](./src/00020-medium-promise-all.ts)
 
+### `String` 字符串类型
+
+- 在模版字符串中使用`infer`，处理字符串类型
+  ```ts
+  type Space = ' ' | '\n' | '\t'
+  type Trim<S extends string> = S extends `${Space}${infer R}` | `${infer R}${Space}` ? Trim<R> : S;
+  ```
+
+- 用模版字符串拼接`String`类型
+  ```ts
+  type MyCapitalize<S extends string> = S extends `${infer F}${infer R}` ? `${Uppercase<F>}${R}` : S;
+  ```
 
 ## 关键字
 
@@ -154,6 +166,11 @@ type MyParameters<T extends (...args: any[]) => any> = T extends (...args: infer
 
 ```ts
 type Push<T extends any[], U> = [...T, U]
+```
+
+用于字符串的例子
+```ts
+type TrimLeft<S extends string> = S extends `${Space}${infer R}` ? TrimLeft<R> : S
 ```
 
 ## 用法
