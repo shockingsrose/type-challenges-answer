@@ -103,14 +103,23 @@ type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 ### `String` 字符串类型
 
 - 在模版字符串中使用`infer`，处理字符串类型
+
   ```ts
   type Space = ' ' | '\n' | '\t'
   type Trim<S extends string> = S extends `${Space}${infer R}` | `${infer R}${Space}` ? Trim<R> : S;
   ```
 
 - 用模版字符串拼接`String`类型
+
   ```ts
   type MyCapitalize<S extends string> = S extends `${infer F}${infer R}` ? `${Uppercase<F>}${R}` : S;
+  ```
+
+- 空字符串不等于``${infer Head}${infer Tail}``
+
+  ```ts
+  type B = '' extends `${infer Head}${infer Tail}` ? 1 : 2;
+  // type B = 2
   ```
 
 ## 关键字
@@ -169,6 +178,7 @@ type Push<T extends any[], U> = [...T, U]
 ```
 
 用于字符串的例子
+
 ```ts
 type TrimLeft<S extends string> = S extends `${Space}${infer R}` ? TrimLeft<R> : S
 ```
