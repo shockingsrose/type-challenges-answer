@@ -100,6 +100,8 @@ type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 
 #### 用`keyof`遍历数组, 参考[00020-medium-promise-all](./src/00020-medium-promise-all.ts)
 
+#### 递归遍历数组，并返回数组类型，参考[00459-medium-flatten](./src/00459-medium-flatten.ts)
+
 ### `String` 字符串类型
 
 - 在模版字符串中使用`infer`，处理字符串类型
