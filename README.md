@@ -7,8 +7,8 @@
 函数类型也属于对象类型
 
 ```ts
-type Add = (a: number, b: number) => number;
-type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2;
+type Add = (a: number, b: number) => number
+type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2
 // type IsFunctionEqualObject = 1
 ```
 
@@ -19,41 +19,59 @@ type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2;
 - `Generics` can't be the object key! but you can take the generics variable after the keyof.
 
   ```ts
-  type AppendToObject<T extends Record<string, unknown>, KEY extends string, VALUE> = {
-    [K in keyof T | KEY]: K extends keyof T ? T[K] : VALUE;
+  type AppendToObject<
+    T extends Record<string, unknown>,
+    KEY extends string,
+    VALUE
+  > = {
+    [K in keyof T | KEY]: K extends keyof T ? T[K] : VALUE
   }
   ```
 
-- `&`合并的两个对象，和原始包含了这两个对象所有属性的对象是不一样的，解决方案之一是使用`export type Debug<T> = { [K in keyof T]: T[K] }`,或者不使用`&`操作符，而是在生成key的时候用`|`,
+- `&`合并的两个对象，和原始包含了这两个对象所有属性的对象是不一样的，解决方案之一是使用`export type Debug<T> = { [K in keyof T]: T[K] }`,或者不使用`&`操作符，而是在生成 key 的时候用`|`,
   参考[00527-medium-append-to-object](./src/00527-medium-append-to-object.ts)、[00599-medium-merge](./src/00599-medium-merge.ts)
 
   ```ts
   type A = {
-      key: 'cat';
-      value: 'green';
+    key: 'cat'
+    value: 'green'
   } & {
-      home: boolean;
+    home: boolean
   }
 
   type B = {
-      key: 'cat';
-      value: 'green';
-      home: boolean;
+    key: 'cat'
+    value: 'green'
+    home: boolean
   }
 
-  type Res1 = Equal<A, B>;
+  type Res1 = Equal<A, B>
   // type Res1 = false
 
-  type Res2 = A extends B ? 1 : 2;
+  type Res2 = A extends B ? 1 : 2
   // type Res2 = 1
 
   /* --------解决方案----------- */
   export type Debug<T> = { [K in keyof T]: T[K] }
-  type Res3 = Equal<Debug<A>, B>;
+  type Res3 = Equal<Debug<A>, B>
   // type Res3 = true
-
   ```
-  
+
+  - 获取两个对象中相同的 key
+
+  ```ts
+  type Foo = {
+    name: string
+    age: string
+  }
+  type Bar = {
+    name: string
+    age: string
+    gender: number
+  }
+
+  type result = keyof (Foo | Bar) // "name" | "age"
+  ```
 
 ### `Generics` 泛型
 
@@ -69,24 +87,24 @@ type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2;
   ```
 
 - 可作为变量，通过递归实现
-参考[00012-medium-chainable-options.ts](./src/00012-medium-chainable-options.ts)
+  参考[00012-medium-chainable-options.ts](./src/00012-medium-chainable-options.ts)
 
 #### Distributive Conditional Types 分布式条件
 
 When conditional types act on a generic type, they become distributive when given a union type(the union type should be on the left of extends key)
 
 ```ts
-type ToArray<Type> = Type extends any ? Type[] : never;
- 
-type StrArrOrNumArr = ToArray<string | number>;
+type ToArray<Type> = Type extends any ? Type[] : never
+
+type StrArrOrNumArr = ToArray<string | number>
 // Output: type StrArrOrNumArr = string[] | number[]
 ```
 
 ### `Tuple` 元组/数组
 
-TypeScript没有内置`Tuple`类型，但是可以自定义为`type Tuple = readonly unknown[]`
+TypeScript 没有内置`Tuple`类型，但是可以自定义为`type Tuple = readonly unknown[]`
 
-#### 使用`in`遍历`Tuple`的值，作为object的key，参考[00011-easy-tuple-to-object.ts](./src/00011-easy-tuple-to-object.ts)
+#### 使用`in`遍历`Tuple`的值，作为 object 的 key，参考[00011-easy-tuple-to-object.ts](./src/00011-easy-tuple-to-object.ts)
 
 ```ts
 type TupleToObject<T extends readonly any[]> = {
@@ -111,25 +129,32 @@ type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 #### 递归遍历数组，并返回数组类型，参考[00459-medium-flatten](./src/00459-medium-flatten.ts)
 
 ### `String` 字符串类型
+
 [模版字符串相关类型文档](https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html)
 
 - 在模版字符串中使用`infer`，处理字符串类型
 
   ```ts
   type Space = ' ' | '\n' | '\t'
-  type Trim<S extends string> = S extends `${Space}${infer R}` | `${infer R}${Space}` ? Trim<R> : S;
+  type Trim<S extends string> = S extends
+    | `${Space}${infer R}`
+    | `${infer R}${Space}`
+    ? Trim<R>
+    : S
   ```
 
 - 用模版字符串拼接`String`类型
 
   ```ts
-  type MyCapitalize<S extends string> = S extends `${infer F}${infer R}` ? `${Uppercase<F>}${R}` : S;
+  type MyCapitalize<S extends string> = S extends `${infer F}${infer R}`
+    ? `${Uppercase<F>}${R}`
+    : S
   ```
 
-- 空字符串不等于``${infer Head}${infer Tail}``, 在这个模版字符串 `Head`会匹配第一个字符，`Tail`会匹配剩余所有字符
+- 空字符串不等于`${infer Head}${infer Tail}`, 在这个模版字符串 `Head`会匹配第一个字符，`Tail`会匹配剩余所有字符
 
   ```ts
-  type B = '' extends `${infer Head}${infer Tail}` ? 1 : 2;
+  type B = '' extends `${infer Head}${infer Tail}` ? 1 : 2
   // type B = 2
   ```
 
@@ -142,12 +167,11 @@ type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 操作 "对象类型" 生成`key`的联合类型，[Link](https://www.typescriptlang.org/docs/handbook/2/keyof-types.html)
 
 ```ts
-type Arrayish = { [n: number]: unknown };
-type A = keyof Arrayish; // number
-    
- 
-type Mapish = { [k: string]: boolean };
-type M = keyof Mapish; // number | string
+type Arrayish = { [n: number]: unknown }
+type A = keyof Arrayish // number
+
+type Mapish = { [k: string]: boolean }
+type M = keyof Mapish // number | string
 
 interface Todo {
   title: string
@@ -155,20 +179,20 @@ interface Todo {
   completed: boolean
 }
 
-type TodoKeys = keyof Todo; // 'title' | 'description' | 'completed'
+type TodoKeys = keyof Todo // 'title' | 'description' | 'completed'
 ```
 
 ### `in`
 
-取联合类型的值，主要用于数组和对象的构建，不可直接用于 "对象类型"
+- 取联合类型的值，主要用于数组和对象的构建，不可直接用于 "对象类型"
 
-```ts
-type name = 'firstname' | 'lastname'
-type TName = {
-  [key in name]: string
-}
-// TName = { firstname: string, lastname: string }
-```
+  ```ts
+  type name = 'firstname' | 'lastname'
+  type TName = {
+    [key in name]: string
+  }
+  // TName = { firstname: string, lastname: string }
+  ```
 
 ### `extends`
 
@@ -181,7 +205,11 @@ type TName = {
 用于函数参数的例子
 
 ```ts
-type MyParameters<T extends (...args: any[]) => any> = T extends (...args: infer R) => any ? R : []
+type MyParameters<T extends (...args: any[]) => any> = T extends (
+  ...args: infer R
+) => any
+  ? R
+  : []
 ```
 
 用于数组的例子
@@ -193,7 +221,9 @@ type Push<T extends any[], U> = [...T, U]
 用于字符串的例子
 
 ```ts
-type TrimLeft<S extends string> = S extends `${Space}${infer R}` ? TrimLeft<R> : S
+type TrimLeft<S extends string> = S extends `${Space}${infer R}`
+  ? TrimLeft<R>
+  : S
 ```
 
 ## 用法
@@ -207,7 +237,7 @@ type MyAwaited<T extends PromiseLike<any>> = T extends PromiseLike<infer R>
   ? R extends PromiseLike<any>
     ? MyAwaited<R>
     : R
-  : T;
+  : T
 ```
 
 通过递归把泛型作为变量，参考[00012-medium-chainable-options.ts](./src/00012-medium-chainable-options.ts)
