@@ -24,7 +24,8 @@ type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2;
   }
   ```
 
-- `&`合并的两个对象，和原始包含了这两个对象所有属性的对象是不一样的
+- `&`合并的两个对象，和原始包含了这两个对象所有属性的对象是不一样的，解决方案之一是使用`export type Debug<T> = { [K in keyof T]: T[K] }`,或者不使用`&`操作符，而是在生成key的时候用`|`,
+  参考[00527-medium-append-to-object](./src/00527-medium-append-to-object.ts)、[00599-medium-merge](./src/00599-medium-merge.ts)
 
   ```ts
   type A = {
@@ -41,11 +42,18 @@ type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2;
   }
 
   type Res1 = Equal<A, B>;
-  // type Res = false
+  // type Res1 = false
 
   type Res2 = A extends B ? 1 : 2;
   // type Res2 = 1
+
+  /* --------解决方案----------- */
+  export type Debug<T> = { [K in keyof T]: T[K] }
+  type Res3 = Equal<Debug<A>, B>;
+  // type Res3 = true
+
   ```
+  
 
 ### `Generics` 泛型
 

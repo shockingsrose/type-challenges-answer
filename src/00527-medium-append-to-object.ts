@@ -63,3 +63,5 @@ type A = AppendToObject1<test1, 'home', boolean>
 type Res1 = Equal<A, testExpect1>
 // type Res1 = false
 
+// export type Debug<T> = { [K in keyof T]: T[K] }
+type Res3 = Equal<Debug<A>, testExpect1>;
