@@ -111,6 +111,7 @@ type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 #### 递归遍历数组，并返回数组类型，参考[00459-medium-flatten](./src/00459-medium-flatten.ts)
 
 ### `String` 字符串类型
+[模版字符串相关类型文档](https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html)
 
 - 在模版字符串中使用`infer`，处理字符串类型
 
@@ -125,12 +126,14 @@ type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
   type MyCapitalize<S extends string> = S extends `${infer F}${infer R}` ? `${Uppercase<F>}${R}` : S;
   ```
 
-- 空字符串不等于``${infer Head}${infer Tail}``
+- 空字符串不等于``${infer Head}${infer Tail}``, 在这个模版字符串 `Head`会匹配第一个字符，`Tail`会匹配剩余所有字符
 
   ```ts
   type B = '' extends `${infer Head}${infer Tail}` ? 1 : 2;
   // type B = 2
   ```
+
+- `Uncapitalize`会将给定字符串的第一个字符小写
 
 ## 关键字
 
