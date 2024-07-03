@@ -57,7 +57,7 @@ type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2
   // type Res3 = true
   ```
 
-  - 获取两个对象中相同的 key
+- 获取两个对象中相同的 key
 
   ```ts
   type Foo = {
@@ -71,6 +71,19 @@ type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2
   }
 
   type result = keyof (Foo | Bar) // "name" | "age"
+  ```
+
+- 定义空对象 `{ [key: string]: never }`
+
+  ```ts
+  type t3 = { name: 'test' } extends {} ? true : false
+  // type t3 = true
+
+  type t4 = { name: 'test' } extends { [key: string]: never } ? true : false
+  // type t4 = false
+
+  type t5 = {} extends { [key: string]: never } ? true : false
+  // type t5 = true
   ```
 
 ### `Generics` 泛型
