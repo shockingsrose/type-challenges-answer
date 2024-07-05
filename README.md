@@ -173,6 +173,14 @@ type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 
 - `Uncapitalize`会将给定字符串的第一个字符小写
 
+### never
+
+- 如何判断`never`
+
+  ```ts
+  type IsNever<T> = [T] extends [never] ? true : false
+  ```
+
 ## 关键字
 
 ### `keyof`
@@ -209,7 +217,30 @@ type TodoKeys = keyof Todo // 'title' | 'description' | 'completed'
 
 ### `extends`
 
+#### distributive
+
 [distributive](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html#distributive-conditional-types)
+
+- 当 U 为对象时候，会在 Mapping Type 外部分布，当 U 为类似 string 或者 number 时候，会在 Mapping Type 内部分布），就能触发 Distributive Conditional Types
+
+  ```ts
+  type A = {
+    name: string
+  }
+
+  type B = {
+    age: number
+  }
+
+  type Dis<T> = {
+    [K in keyof T]: K
+  }
+
+  type res1 = Dis<A> | Dis<B>
+  type res2 = Dis<A | B>
+
+  type result = Equal<res1, res2>
+  ```
 
 ### `infer`
 
