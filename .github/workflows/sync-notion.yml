@@ -13,34 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Fetch Latest Page ID from Notion Database
-        id: fetch_latest_page
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16' # 指定 Node.js 的版本
+        run: node notion.js
         env:
-          NOTION_AUTHORIZATION: ${{ secrets.NOTION_AUTHORIZATION }}
-          NOTION_DATABASE_ID: c615969290964cb38751981cb02202f2
-        run: |
-          LATEST_PAGE_DATA=$(curl -X POST 'https://api.notion.com/v1/databases/${NOTION_DATABASE_ID}/query' \
-          -H 'Authorization: ${NOTION_AUTHORIZATION}' \
-          -H "Content-Type: application/json" \
-          -H "Notion-Version: 2022-06-28" \
-          --data '{"page_size": 1, "sorts": [{"timestamp": "created_time", "direction": "descending"}]}')
-          LATEST_PAGE_ID=$(echo $LATEST_PAGE_DATA | jq -r '.results[0].id')
-          echo "::set-output name=latest_page_id::$LATEST_PAGE_ID"
-
-      - name: Update Notion Table View Cell with Latest Page ID
-        env:
-          NOTION_AUTHORIZATION: ${{ secrets.NOTION_AUTHORIZATION }}
-          NOTION_PROPERTY_ID: ${{ secrets.NOTION_PROPERTY_ID }}
-          NEW_VALUE: 'Your new value here'
-        run: |
-          curl -X PATCH "https://api.notion.com/v1/pages/${{ steps.fetch_latest_page.outputs.latest_page_id }}" \
-          -H 'Authorization: ${NOTION_AUTHORIZATION}' \
-          -H "Content-Type: application/json" \
-          -H "Notion-Version: 2022-06-28" \
-          --data '{
-            "properties": {
-              "${NOTION_PROPERTY_ID}": {
-                "checkbox": true
-              }
-            }
-          }'
+          NOTION_API_KEY: ${{ secrets.NOTION_AUTHORIZATION }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_HABIT_PAGE_DATABASE_ID }}

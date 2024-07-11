@@ -1,0 +1,23 @@
+{
+  "name": "type-challenges-answer",
+  "version": "1.0.0",
+  "description": "type-challenges-answer",
+  "private": "true",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shockingsrose/type-challenges-answer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shockingsrose/type-challenges-answer/issues"
+  },
+  "homepage": "https://github.com/shockingsrose/type-challenges-answer#readme",
+  "dependencies": {
+    "@notionhq/client": "^2.2.15"
+  }
+}
