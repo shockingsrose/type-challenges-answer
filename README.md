@@ -285,3 +285,35 @@ type MyAwaited<T extends PromiseLike<any>> = T extends PromiseLike<infer R>
 ```
 
 通过递归把泛型作为变量，参考[00012-medium-chainable-options.ts](./src/00012-medium-chainable-options.ts)
+
+## [Utility Types](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+
+### Exclude
+
+用法：`Exclude<UnionType, ExcludedMembers>`
+用于排除联合类型里的部分成员
+
+```ts
+type T1 = Exclude<'a' | 'b' | 'c', 'a' | 'b'>
+// type T1 = "c"
+
+type T2 = Exclude<string | number | (() => void), Function>
+// type T2 = string | number
+
+type Shape =
+  | { kind: 'circle'; radius: number }
+  | { kind: 'square'; x: number }
+  | { kind: 'triangle'; x: number; y: number }
+
+type T3 = Exclude<Shape, { kind: 'circle' }>
+type T3Result =
+  | {
+      kind: 'square'
+      x: number
+    }
+  | {
+      kind: 'triangle'
+      x: number
+      y: number
+    }
+```
