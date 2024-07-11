@@ -17,7 +17,7 @@ jobs:
         id: fetch_latest_page
         env:
           NOTION_AUTHORIZATION: ${{ secrets.NOTION_AUTHORIZATION }}
-          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_HABIT_PAGE_DATABASE_ID }}
         run: |
           LATEST_PAGE_DATA=$(curl -X POST 'https://api.notion.com/v1/databases/${NOTION_DATABASE_ID}/query' \
           -H 'Authorization: ${NOTION_AUTHORIZATION}' \
