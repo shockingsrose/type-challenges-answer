@@ -6,7 +6,6 @@
   "scripts": {
     "build": "rollup -c"
   },
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shockingsrose/type-challenges-answer.git"
