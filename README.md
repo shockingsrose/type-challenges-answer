@@ -86,6 +86,23 @@ type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2
   // type t5 = true
   ```
 
+- 移除对象属性上的`?`
+
+  ```ts
+  interface User {
+    name?: string
+    age?: number
+    address?: string
+  }
+
+  type Required<T> = {
+    [K in keyof T]-?: T[K]
+  }
+
+  type A = Required<User>
+  // type A = { name: string; age: number; address: string }
+  ```
+
 ### `Generics` 泛型
 
 注意点：
