@@ -95,12 +95,20 @@ type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2
     address?: string
   }
 
-  type Required<T> = {
+  type Required<T> = {¡
     [K in keyof T]-?: T[K]
   }
 
   type A = Required<User>
   // type A = { name: string; age: number; address: string }
+  ```
+
+- 移除对象属性上的`readonly`
+
+  ```ts
+  type Mutable<T extends object> = {
+    -readonly[K in keyof T]: T[K]
+  }
   ```
 
 ### `Generics` 泛型
