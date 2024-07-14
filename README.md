@@ -295,6 +295,17 @@ type TrimLeft<S extends string> = S extends `${Space}${infer R}`
   : S
 ```
 
+### `as`
+
+- 跟随在`[K in keyof T]`后面，例如`[K in keyof T as K]`, 高级用法参考下面示例
+
+  ```ts
+  // src/02852-medium-omitbytype.ts
+  type OmitByType<T, U> = NonNullable<{
+    [K in keyof T as T[K] extends U ? never : K]: T[K]
+  }>
+  ```
+
 ## 用法
 
 ### 递归类型推断

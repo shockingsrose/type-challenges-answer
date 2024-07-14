@@ -16,6 +16,9 @@ type cases = [
 
 
 // ============= Your Code Here =============
-type OmitByType<T, U> = {
-  
-}
+type OmitByType<T, U> = NonNullable<{
+  [K in keyof T as T[K] extends U ? never : K]: T[K]
+}>
+
+
+type A = OmitByType<Model, boolean>
