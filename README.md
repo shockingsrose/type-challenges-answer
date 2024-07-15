@@ -14,118 +14,134 @@ type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2
 
 ### 对象类型
 
-- The keyof operator takes an object type and produces a string or numeric literal union of its keys.
+#### The keyof operator takes an object type and produces a string or numeric literal union of its keys.
 
-- `Generics` can't be the object key! but you can take the generics variable after the keyof.
+#### 对象转联合类型
 
-  ```ts
-  type AppendToObject<
-    T extends Record<string, unknown>,
-    KEY extends string,
-    VALUE
-  > = {
-    [K in keyof T | KEY]: K extends keyof T ? T[K] : VALUE
-  }
-  ```
+```ts
+type A = {
+  name: string
+  age: number
+}
 
-- `&`合并的两个对象，和原始包含了这两个对象所有属性的对象是不一样的，解决方案之一是使用`export type Debug<T> = { [K in keyof T]: T[K] }`,或者不使用`&`操作符，而是在生成 key 的时候用`|`,
-  参考[00527-medium-append-to-object](./src/00527-medium-append-to-object.ts)、[00599-medium-merge](./src/00599-medium-merge.ts)
+type ObjectToUnion<T> = T[keyof T]
 
-  ```ts
-  type A = {
-    key: 'cat'
-    value: 'green'
-  } & {
-    home: boolean
-  }
+type B = ObjectToUnion<A>
+// type B = string | number
+```
 
-  type B = {
-    key: 'cat'
-    value: 'green'
-    home: boolean
-  }
+#### `Generics` can't be the object key! but you can take the generics variable after the keyof.
 
-  type Res1 = Equal<A, B>
-  // type Res1 = false
+```ts
+type AppendToObject<
+  T extends Record<string, unknown>,
+  KEY extends string,
+  VALUE
+> = {
+  [K in keyof T | KEY]: K extends keyof T ? T[K] : VALUE
+}
+```
 
-  type Res2 = A extends B ? 1 : 2
-  // type Res2 = 1
+#### `&`合并的两个对象，和原始包含了这两个对象所有属性的对象是不一样的，解决方案之一是使用`export type Debug<T> = { [K in keyof T]: T[K] }`,或者不使用`&`操作符，而是在生成 key 的时候用`|`,
 
-  /* --------解决方案----------- */
-  export type Debug<T> = { [K in keyof T]: T[K] }
-  type Res3 = Equal<Debug<A>, B>
-  // type Res3 = true
-  ```
+参考[00527-medium-append-to-object](./src/00527-medium-append-to-object.ts)、[00599-medium-merge](./src/00599-medium-merge.ts)
 
-- 获取两个对象中相同的 key
+```ts
+type A = {
+  key: 'cat'
+  value: 'green'
+} & {
+  home: boolean
+}
 
-  ```ts
-  type Foo = {
-    name: string
-    age: string
-  }
-  type Bar = {
-    name: string
-    age: string
-    gender: number
-  }
+type B = {
+  key: 'cat'
+  value: 'green'
+  home: boolean
+}
 
-  type result = keyof (Foo | Bar) // "name" | "age"
-  ```
+type Res1 = Equal<A, B>
+// type Res1 = false
 
-- 定义空对象 `{ [key: string]: never }`
+type Res2 = A extends B ? 1 : 2
+// type Res2 = 1
 
-  ```ts
-  type t3 = { name: 'test' } extends {} ? true : false
-  // type t3 = true
+/* --------解决方案----------- */
+export type Debug<T> = { [K in keyof T]: T[K] }
+type Res3 = Equal<Debug<A>, B>
+// type Res3 = true
+```
 
-  type t4 = { name: 'test' } extends { [key: string]: never } ? true : false
-  // type t4 = false
+#### 获取两个对象中相同的 key
 
-  type t5 = {} extends { [key: string]: never } ? true : false
-  // type t5 = true
-  ```
+```ts
+type Foo = {
+  name: string
+  age: string
+}
+type Bar = {
+  name: string
+  age: string
+  gender: number
+}
 
-- 移除对象属性上的`?`
+type result = keyof (Foo | Bar) // "name" | "age"
+```
 
-  ```ts
-  interface User {
-    name?: string
-    age?: number
-    address?: string
-  }
+#### 定义空对象 `{ [key: string]: never }`
 
-  type Required<T> = {¡
-    [K in keyof T]-?: T[K]
-  }
+```ts
+type t3 = { name: 'test' } extends {} ? true : false
+// type t3 = true
 
-  type A = Required<User>
-  // type A = { name: string; age: number; address: string }
-  ```
+type t4 = { name: 'test' } extends { [key: string]: never } ? true : false
+// type t4 = false
 
-- 移除对象属性上的`readonly`
+type t5 = {} extends { [key: string]: never } ? true : false
+// type t5 = true
+```
 
-  ```ts
-  type Mutable<T extends object> = {
-    -readonly[K in keyof T]: T[K]
-  }
-  ```
+#### 移除对象属性上的`?`
+
+```ts
+interface User {
+  name?: string
+  age?: number
+  address?: string
+}
+
+type Required<T> = {¡
+  [K in keyof T]-?: T[K]
+}
+
+type A = Required<User>
+// type A = { name: string; age: number; address: string }
+```
+
+#### 移除对象属性上的`readonly`
+
+```ts
+type Mutable<T extends object> = {
+  -readonly [K in keyof T]: T[K]
+}
+```
 
 ### `Generics` 泛型
 
 注意点：
 
-- 变量需要定义在`<>`内部，参考[00007-easy-readonly](./src/00007-easy-readonly.ts)
+#### 变量需要定义在`<>`内部，参考[00007-easy-readonly](./src/00007-easy-readonly.ts)
 
-  ```ts
-  /** 这里定义了K变量，并且给了默认值，使用时不需要传 */
-  type MyReadonly<T, K = keyof T> = {
-    readonly [K in keyof T]: T[K]
-  }
-  ```
+```ts
+/** 这里定义了K变量，并且给了默认值，使用时不需要传 */
+type MyReadonly<T, K = keyof T> = {
+  readonly [K in keyof T]: T[K]
+}
+```
 
-- 可作为变量，通过递归实现
-  参考[00012-medium-chainable-options.ts](./src/00012-medium-chainable-options.ts)
+#### 可作为变量，通过递归实现
+
+参考[00012-medium-chainable-options.ts](./src/00012-medium-chainable-options.ts)
 
 #### Distributive Conditional Types 分布式条件
 
@@ -166,45 +182,55 @@ type Concat<T extends readonly any[], U extends readonly any[]> = [...T, ...U]
 
 #### 递归遍历数组，并返回数组类型，参考[00459-medium-flatten](./src/00459-medium-flatten.ts)
 
+#### 数组转联合类型
+
+```ts
+type A = ['1', '2']
+type ArrayToUnion<T extends any[]> = T[number]
+
+type B = ArrayToUnion<A>
+// type B = '1' | '2'
+```
+
 ### `String` 字符串类型
 
 [模版字符串相关类型文档](https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html)
 
-- 在模版字符串中使用`infer`，处理字符串类型
+#### 在模版字符串中使用`infer`，处理字符串类型
 
-  ```ts
-  type Space = ' ' | '\n' | '\t'
-  type Trim<S extends string> = S extends
-    | `${Space}${infer R}`
-    | `${infer R}${Space}`
-    ? Trim<R>
-    : S
-  ```
+```ts
+type Space = ' ' | '\n' | '\t'
+type Trim<S extends string> = S extends
+  | `${Space}${infer R}`
+  | `${infer R}${Space}`
+  ? Trim<R>
+  : S
+```
 
-- 用模版字符串拼接`String`类型
+#### 用模版字符串拼接`String`类型
 
-  ```ts
-  type MyCapitalize<S extends string> = S extends `${infer F}${infer R}`
-    ? `${Uppercase<F>}${R}`
-    : S
-  ```
+```ts
+type MyCapitalize<S extends string> = S extends `${infer F}${infer R}`
+  ? `${Uppercase<F>}${R}`
+  : S
+```
 
-- 空字符串不等于`${infer Head}${infer Tail}`, 在这个模版字符串 `Head`会匹配第一个字符，`Tail`会匹配剩余所有字符
+#### 空字符串不等于`${infer Head}${infer Tail}`, 在这个模版字符串 `Head`会匹配第一个字符，`Tail`会匹配剩余所有字符
 
-  ```ts
-  type B = '' extends `${infer Head}${infer Tail}` ? 1 : 2
-  // type B = 2
-  ```
+```ts
+type B = '' extends `${infer Head}${infer Tail}` ? 1 : 2
+// type B = 2
+```
 
-- `Uncapitalize`会将给定字符串的第一个字符小写
+#### `Uncapitalize`会将给定字符串的第一个字符小写
 
 ### never
 
-- 如何判断`never`
+#### 如何判断`never`
 
-  ```ts
-  type IsNever<T> = [T] extends [never] ? true : false
-  ```
+```ts
+type IsNever<T> = [T] extends [never] ? true : false
+```
 
 ## 关键字
 
@@ -230,15 +256,15 @@ type TodoKeys = keyof Todo // 'title' | 'description' | 'completed'
 
 ### `in`
 
-- 取联合类型的值，主要用于数组和对象的构建，不可直接用于 "对象类型"
+#### 取联合类型的值，主要用于数组和对象的构建，不可直接用于 "对象类型"
 
-  ```ts
-  type name = 'firstname' | 'lastname'
-  type TName = {
-    [key in name]: string
-  }
-  // TName = { firstname: string, lastname: string }
-  ```
+```ts
+type name = 'firstname' | 'lastname'
+type TName = {
+  [key in name]: string
+}
+// TName = { firstname: string, lastname: string }
+```
 
 ### `extends`
 
@@ -246,26 +272,26 @@ type TodoKeys = keyof Todo // 'title' | 'description' | 'completed'
 
 [distributive](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html#distributive-conditional-types)
 
-- 当 U 为对象时候，会在 Mapping Type 外部分布，当 U 为类似 string 或者 number 时候，会在 Mapping Type 内部分布），就能触发 Distributive Conditional Types
+#### 当 U 为对象时候，会在 Mapping Type 外部分布，当 U 为类似 string 或者 number 时候，会在 Mapping Type 内部分布），就能触发 Distributive Conditional Types
 
-  ```ts
-  type A = {
-    name: string
-  }
+```ts
+type A = {
+  name: string
+}
 
-  type B = {
-    age: number
-  }
+type B = {
+  age: number
+}
 
-  type Dis<T> = {
-    [K in keyof T]: K
-  }
+type Dis<T> = {
+  [K in keyof T]: K
+}
 
-  type res1 = Dis<A> | Dis<B>
-  type res2 = Dis<A | B>
+type res1 = Dis<A> | Dis<B>
+type res2 = Dis<A | B>
 
-  type result = Equal<res1, res2>
-  ```
+type result = Equal<res1, res2>
+```
 
 ### `infer`
 
@@ -297,14 +323,14 @@ type TrimLeft<S extends string> = S extends `${Space}${infer R}`
 
 ### `as`
 
-- 跟随在`[K in keyof T]`后面，例如`[K in keyof T as K]`, 高级用法参考下面示例
+#### 跟随在`[K in keyof T]`后面，例如`[K in keyof T as K]`, 高级用法参考下面示例
 
-  ```ts
-  // src/02852-medium-omitbytype.ts
-  type OmitByType<T, U> = NonNullable<{
-    [K in keyof T as T[K] extends U ? never : K]: T[K]
-  }>
-  ```
+```ts
+// src/02852-medium-omitbytype.ts
+type OmitByType<T, U> = NonNullable<{
+  [K in keyof T as T[K] extends U ? never : K]: T[K]
+}>
+```
 
 ## 用法
 
