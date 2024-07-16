@@ -19,7 +19,3 @@ type TupleToNestedObject<T, U> = T extends [infer F, ...infer R]
       [K in F & string]: TupleToNestedObject<R, U>
     }
   : U
-
-type Model = ['name', 'storm']
-
-type TupleToObject<T> = T extends [infer F, infer R] ? { [K in F]: R } : never
