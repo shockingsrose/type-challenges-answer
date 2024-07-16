@@ -126,6 +126,21 @@ type Mutable<T extends object> = {
 }
 ```
 
+#### infer 出来的值作为对象的 key，需要 extends `string | number | symbol`
+
+```ts
+type Model = ['name', 'storm']
+
+// `{ [K in F]: R }` 这种写法会报错，因为无法确定K的类型
+type TupleToObject1<T> = T extends [infer F, infer R] ? { [K in F]: R } : never
+// Type 'F' is not assignable to type 'string | number | symbol'.
+
+// `{ [K in F & string]: R }` 改为这种写法就能确定 `K` 一定是string类型
+type TupleToObject<T> = T extends [infer F, infer R]
+  ? { [K in F & string]: R }
+  : never
+```
+
 ### `Generics` 泛型
 
 注意点：
