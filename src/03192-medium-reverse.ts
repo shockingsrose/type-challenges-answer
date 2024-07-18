@@ -23,7 +23,7 @@ type Reverse<T extends Array<any>> = T extends [infer F, ...infer M, infer L]
 
 /** 高赞答案 */
 type Reverse1<T extends any[]> = T extends [infer F, ...infer Rest]
-  ? [...Reverse<Rest>, F]
+  ? [...Reverse1<Rest>, F]
   : T
 
-type A = Reverse<['a', 'b', 'c', 'd']>
+type A = Reverse1<['a', 'b', 'c', 'd']>
