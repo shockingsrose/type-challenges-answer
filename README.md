@@ -363,7 +363,26 @@ type MyAwaited<T extends PromiseLike<any>> = T extends PromiseLike<infer R>
 
 通过递归把泛型作为变量，参考[00012-medium-chainable-options.ts](./src/00012-medium-chainable-options.ts)
 
-## [Utility Types](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+### 数字运算
+
+在 typescript 中，无法使用`+`, `-`, `*`, `/`等运算符，但是可以通过控制数组的长度来计算
+
+```ts
+type PlusOne<T extends any[]> = [0, ...T]['length']
+type MinusOne<T extends any[]> = T extends [0, ...infer R] ? R['length'] : never
+type MultiplyByTwo<T extends any[]> = [...T, ...T]['length']
+
+type PlusOneResult = PlusOne<[1, 1, 1]>
+// type PlusOneResult = 4
+
+type MinusOneResult = MinusOne<[1, 1, 1]>
+// type MinusOneResult = 2
+
+type MultiplyByTwoResult = MultiplyByTwo<[1, 1, 1]>
+// type MultiplyByTwoResult = 6
+```
+
+## 内置工具函数 [Utility Types](https://www.typescriptlang.org/docs/handbook/utility-types.html)
 
 ### Exclude
 
