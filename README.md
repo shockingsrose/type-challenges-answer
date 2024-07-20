@@ -14,7 +14,7 @@ type IsFunctionEqualObject = Add extends Record<string, any> ? 1 : 2
 
 ### 对象类型
 
-#### The keyof operator takes an object type and produces a string or numeric literal union of its keys.
+#### The keyof operator takes an object type and produces a string or numeric literal union of its keys
 
 #### 对象转联合类型
 
@@ -30,7 +30,7 @@ type B = ObjectToUnion<A>
 // type B = string | number
 ```
 
-#### `Generics` can't be the object key! but you can take the generics variable after the keyof.
+#### `Generics` can't be the object key! but you can take the generics variable after the keyof
 
 ```ts
 type AppendToObject<
@@ -42,7 +42,7 @@ type AppendToObject<
 }
 ```
 
-#### `&`合并的两个对象，和原始包含了这两个对象所有属性的对象是不一样的，解决方案之一是使用`export type Debug<T> = { [K in keyof T]: T[K] }`,或者不使用`&`操作符，而是在生成 key 的时候用`|`,
+#### `&`合并的两个对象，和原始包含了这两个对象所有属性的对象是不一样的，解决方案之一是使用`export type Debug<T> = { [K in keyof T]: T[K] }`,或者不使用`&`操作符，而是在生成 key 的时候用`|`
 
 参考[00527-medium-append-to-object](./src/00527-medium-append-to-object.ts)、[00599-medium-merge](./src/00599-medium-merge.ts)
 
