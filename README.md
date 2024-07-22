@@ -245,6 +245,11 @@ type B = '' extends `${infer Head}${infer Tail}` ? 1 : 2
 
 ```ts
 type IsNever<T> = [T] extends [never] ? true : false
+
+/** 这种情况下 A也是never */
+type E = []
+type A = IsNever<`__${E[number]}`>
+// type A = true
 ```
 
 ## 关键字
