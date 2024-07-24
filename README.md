@@ -356,7 +356,7 @@ type OmitByType<T, U> = NonNullable<{
 
 ### 递归类型推断
 
-参考[00189-easy-awaited](./src/00189-easy-awaited.ts)
+- 参考[00189-easy-awaited](./src/00189-easy-awaited.ts)
 
 ```ts
 type MyAwaited<T extends PromiseLike<any>> = T extends PromiseLike<infer R>
@@ -366,7 +366,9 @@ type MyAwaited<T extends PromiseLike<any>> = T extends PromiseLike<infer R>
   : T
 ```
 
-通过递归把泛型作为变量，参考[00012-medium-chainable-options.ts](./src/00012-medium-chainable-options.ts)
+- 通过递归把泛型作为变量
+  - [00012-medium-chainable-options.ts](./src/00012-medium-chainable-options.ts)
+  - [04499-medium-chunk.ts](./src/04499-medium-chunk.ts)
 
 ### 数字运算
 
