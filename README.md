@@ -110,6 +110,18 @@ type B = '' extends `${infer Head}${infer Tail}` ? 1 : 2
 
 #### `Uncapitalize`会将给定字符串的第一个字符小写
 
+#### 将数字类型的 1.0 转换为字符串，会得到 "1"
+
+```ts
+type NumberToString<T extends number> = `${T}`
+
+type A1 = NumberToString<1.1>;
+// type A1 = "1.1"
+
+type A2 = NumberToString<1.0>
+// type A2 = "1"
+```
+
 ### never
 
 #### 如何判断`never`
