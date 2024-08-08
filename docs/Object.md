@@ -133,4 +133,8 @@ type TupleToObject<T> = T extends [infer F, infer R]
   : never
 ```
 
-### 
+### 对象属性的操作 要多使用`Excludes` `|` `&` 等操作符
+
+参考题目
+
+- [extracttoobject](../src/29650-medium-extracttoobject.ts)

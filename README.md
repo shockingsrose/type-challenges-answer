@@ -235,6 +235,31 @@ type OmitByType<T, U> = NonNullable<{
 }>
 ```
 
+```ts
+type ExtractToObject1<T extends Record<string, unknown>, U extends keyof T> = {
+  // 左边的K会被`as`关键字改写 但是右边的K不会（始终为keyof T）
+  [K in keyof T as K extends U ? keyof T[U] : K]: K
+}
+
+type test2 = {
+  id: '1'
+  prop1: { zoo: '2' }
+  prop2: { foo: '4' }
+}
+
+type A = ExtractToObject1<test2, 'prop1'>
+/* Output:
+
+  type A = {
+    id: 'id',
+    zoo: 'prop1',
+    prop2: 'prop2'
+  }
+
+*/
+
+```
+
 ## 用法
 
 ### 递归类型推断
